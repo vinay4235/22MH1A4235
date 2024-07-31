@@ -1,0 +1,115 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/vinay4235/22MH1A4235/blob/main/exp%202-ml\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "data = pd.DataFrame(data=pd.read_csv('/content/data (2).csv'))\n",
+        "concepts = np.array(data.iloc[:,0:-1])\n",
+        "target = np.array(data.iloc[:,-1])\n",
+        "def learn(concepts, target):\n",
+        "  specific_h = concepts[0].copy()\n",
+        "  print(\"initialization of specific_h\\n,specific_h\")\n",
+        "  general_h = [[] for i in range(len(specific_h))]\n",
+        "  print(\"Initialization of general_h\\n,general_h\")\n",
+        "  for i, h in enumerate(concepts):\n",
+        "    if target[i] == \"yes\":\n",
+        "      print(\"Instance is positive\")\n",
+        "      for x in range(len(specific_h)):\n",
+        "        if h[x]!=specific_h[x]:\n",
+        "          specific_h[x]='?'\n",
+        "          general_h[x].append('?')\n",
+        "    elif target[i]=='no':\n",
+        "      print(\"Instance is negative\")\n",
+        "      for x in range(len(specific_h)):\n",
+        "        if h[x]!=specific_h[x]:\n",
+        "          general_h[x].append(specific_h[x])\n",
+        "        else:\n",
+        "          general_h[x].append('?')\n",
+        "    print(\"Step{i+1}\")\n",
+        "    print(specific_h)\n",
+        "    print(general_h)\n",
+        "    print(\"\\n\")\n",
+        "    Indices=[i for i, val in enumerate(general_h) if val==['?','?','?','?','?','?']]\n",
+        "    for i in Indices:\n",
+        "      general_h.remove(['?','?','?','?','?','?'])\n",
+        "  return specific_h, general_h\n",
+        "specific_h_result, general_h_result = learn(concepts, target)\n",
+        "print(\"Final Specific_h:\", specific_h_result, sep=\"\\n\")\n",
+        "print(\"Final General_h:\", general_h_result, sep=\"\\n\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Nahe9L63HpHq",
+        "outputId": "9f5f835b-270f-4000-d78f-4bb20e80f72b"
+      },
+      "execution_count": 22,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "initialization of specific_h\n",
+            ",specific_h\n",
+            "Initialization of general_h\n",
+            ",general_h\n",
+            "Instance is positive\n",
+            "Step{i+1}\n",
+            "['sunny' 'warm' 'normal' 'strong' 'warm' 'same']\n",
+            "[[], [], [], [], [], []]\n",
+            "\n",
+            "\n",
+            "Instance is positive\n",
+            "Step{i+1}\n",
+            "['sunny' 'warm' '?' 'strong' 'warm' 'same']\n",
+            "[[], [], ['?'], [], [], []]\n",
+            "\n",
+            "\n",
+            "Instance is negative\n",
+            "Step{i+1}\n",
+            "['sunny' 'warm' '?' 'strong' 'warm' 'same']\n",
+            "[['sunny'], ['warm'], ['?', '?'], ['?'], ['?'], ['same']]\n",
+            "\n",
+            "\n",
+            "Instance is positive\n",
+            "Step{i+1}\n",
+            "['sunny' 'warm' '?' 'strong' '?' '?']\n",
+            "[['sunny'], ['warm'], ['?', '?', '?'], ['?'], ['?', '?'], ['same', '?']]\n",
+            "\n",
+            "\n",
+            "Final Specific_h:\n",
+            "['sunny' 'warm' '?' 'strong' '?' '?']\n",
+            "Final General_h:\n",
+            "[['sunny'], ['warm'], ['?', '?', '?'], ['?'], ['?', '?'], ['same', '?']]\n"
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "name": "Welcome To Colab",
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
